@@ -3,7 +3,8 @@
     angular.module('multipleSelect').directive('multipleAutocomplete', [
         '$filter',
         '$http',
-        function ($filter, $http) {
+        '$timeout',
+        function ($filter, $http, $timeout) {
             return {
                 restrict: 'EA',
                 scope : {
@@ -13,7 +14,8 @@
                     beforeSelectItem : '=?',
                     afterSelectItem : '=?',
                     beforeRemoveItem : '=?',
-                    afterRemoveItem : '=?'
+                    afterRemoveItem : '=?',
+                    maxSelection : '=?'
                 },
                 templateUrl: 'multiple-autocomplete-tpl.html',
                 link : function(scope, element, attr){
@@ -24,6 +26,11 @@
                     scope.errMsgRequired = attr.errMsgRequired;
                     scope.isHover = false;
                     scope.isFocused = false;
+                    scope.resultsToShow = false;
+                    scope.results = {filter: []};
+                    scope.inputValue = '';
+                    scope.maxSelection = attr.maxSelection | 9999;
+
                     var getSuggestionsList = function () {
                         var url = scope.apiUrl;
                         $http({
@@ -48,7 +55,9 @@
                         scope.modelArr = [];
                     }
                     scope.onFocus = function () {
-                        scope.isFocused=true
+                        scope.isFocused = true;
+                        if(scope.inputValue.length >= 1)
+                            scope.resultsToShow = true;
                     };
 
                     scope.onMouseEnter = function () {
@@ -60,11 +69,16 @@
                     };
 
                     scope.onBlur = function () {
-                        scope.isFocused=false;
+                        scope.isFocused = false;
+                        if(!scope.isHover)
+                            scope.resultsToShow = false;
                     };
 
                     scope.onChange = function () {
                         scope.selectedItemIndex = 0;
+                        $timeout(function () {
+                                scope.resultsToShow = scope.results.filter.length !== 0;
+                        }, 300);
                     };
 
                     scope.keyParser = function ($event) {
@@ -113,6 +127,7 @@
                         if(scope.afterSelectItem && typeof(scope.afterSelectItem) == 'function')
                             scope.afterSelectItem(selectedValue);
                         scope.inputValue = "";
+                        scope.resultsToShow = false;
                     };
 
                     var isDuplicate = function (arr, item) {
