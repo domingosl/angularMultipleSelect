@@ -1,5 +1,25 @@
 (function () {
 
+    angular.module('multipleSelect').directive('focusMe', function($timeout, $parse) {
+        return {
+            link: function(scope, element, attrs) {
+                var model = $parse(attrs.focusMe);
+                scope.$watch(model, function(value) {
+                    console.log('value=',value);
+                    if(value === true) {
+                        $timeout(function() {
+                            element[0].focus();
+                        });
+                    }
+                });
+                element.bind('blur', function() {
+                    console.log('blur')
+                    scope.$apply(model.assign(scope, false));
+                })
+            }
+        };
+    });
+
     angular.module('multipleSelect').directive('multipleAutocomplete', [
         '$filter',
         '$http',
@@ -18,7 +38,10 @@
                     maxSelection : '=?'
                 },
                 templateUrl: 'multiple-autocomplete-tpl.html',
-                link : function(scope, element, attr){
+                link : function(scope, element, attr) {
+
+                    scope.focusMe = false;
+
                     scope.objectProperty = attr.objectProperty;
                     scope.selectedItemIndex = 0;
                     scope.name = attr.name;
@@ -43,7 +66,7 @@
                         });
                     };
 
-                    if(scope.suggestionsArr == null || scope.suggestionsArr == ""){
+                    if(scope.suggestionsArr == null || scope.suggestionsArr == "") {
                         if(scope.apiUrl != null && scope.apiUrl != "")
                             getSuggestionsList();
                         else{
@@ -51,9 +74,10 @@
                         }
                     }
 
-                    if(scope.modelArr == null || scope.modelArr == ""){
+                    if(scope.modelArr == null || scope.modelArr == "") {
                         scope.modelArr = [];
                     }
+
                     scope.onFocus = function () {
                         scope.isFocused = true;
                         if(scope.inputValue.length >= 1)
@@ -126,8 +150,10 @@
 
                         if(scope.afterSelectItem && typeof(scope.afterSelectItem) == 'function')
                             scope.afterSelectItem(selectedValue);
+
                         scope.inputValue = "";
                         scope.resultsToShow = false;
+                        scope.focusMe = true;
                     };
 
                     var isDuplicate = function (arr, item) {
@@ -178,4 +204,6 @@
             };
         }
     ]);
+
+
 })();
