@@ -1,39 +1,49 @@
 <div class="ng-ms form-item-container">
-    <ul class="list-inline">
-        <li ng-repeat="item in modelArr">
-			<span ng-if="objectProperty == undefined || objectProperty == ''">
-				{{item}} <span class="remove" ng-click="removeAddedValues(item)">
-                <i class="glyphicon glyphicon-remove"></i></span>&nbsp;
-			</span>
-            <span ng-if="objectProperty != undefined && objectProperty != ''">
-				{{item[objectProperty]}} <span class="remove" ng-click="removeAddedValues(item)">
-                <i class="glyphicon glyphicon-remove"></i></span>&nbsp;
-			</span>
-        </li>
-        <li>
-            <input name="{{name}}" ng-model="inputValue" placeholder="" ng-keydown="keyParser($event)"
-                   err-msg-required="{{errMsgRequired}}"
-                   focus-me="focusMe"
-                   ng-focus="onFocus()" ng-blur="onBlur()" ng-required="!modelArr.length && isRequired"
-                    ng-change="onChange()">
-        </li>
-    </ul>
-    
+
+    <div class="selected-items">
+        <ul class="list-inline">
+
+            <li ng-repeat="item in modelArr">
+                <span ng-if="objectProperty == undefined || objectProperty == ''">
+                    {{item}} <span class="remove" ng-click="removeAddedValues(item)">
+                    <i class="glyphicon glyphicon-remove"></i></span>&nbsp;
+                </span>
+                <span ng-if="objectProperty != undefined && objectProperty != ''">
+                    {{item[objectProperty]}}<i ng-if="secondaryObjectProperty"> <small>({{item[secondaryObjectProperty]}})</small></i> <span class="remove" ng-click="removeAddedValues(item)">
+                    <i class="glyphicon glyphicon-remove"></i></span>&nbsp;
+                </span>
+            </li>
+
+        </ul>
+    </div>
+
+
+    <input name="{{name}}" ng-model="input.value" placeholder="" ng-keydown="keyParser($event)"
+           ng-if="modelArr.length < maxSelection"
+           err-msg-required="{{errMsgRequired}}"
+           focus-me="focusMe.flag"
+           ng-focus="onFocus()" ng-blur="onBlur()" ng-required="!modelArr.length && isRequired"
+           ng-change="onChange()" />
+
+
     <div class="autocomplete-list" ng-show="resultsToShow" ng-mouseenter="onMouseEnter()" ng-mouseleave="onMouseLeave()">
+
     <ul ng-if="objectProperty == undefined || objectProperty == ''">
         <li ng-class="{'autocomplete-active' : selectedItemIndex == $index}"
-            ng-repeat="suggestion in (results.filter = (suggestionsArr | filter : inputValue | filter : alreadyAddedValues | limitTo: 5))"
+            ng-repeat="suggestion in (results.filter = (suggestionsArr | filter : input.value | filter : alreadyAddedValues | limitTo: 5))"
             ng-click="onSuggestedItemsClick(suggestion)" ng-mouseenter="mouseEnterOnItem($index)">
             {{suggestion}}
         </li>
     </ul>
+
     <ul ng-if="objectProperty != undefined && objectProperty != ''">
         <li ng-class="{'autocomplete-active' : selectedItemIndex == $index}"
-            ng-repeat="suggestion in (results.filter = (suggestionsArr | filter : inputValue | filter : alreadyAddedValues | limitTo: 5))"
+            ng-repeat="suggestion in (results.filter = (suggestionsArr | filter : input.value | filter : alreadyAddedValues | limitTo: 5))"
             ng-click="onSuggestedItemsClick(suggestion)" ng-mouseenter="mouseEnterOnItem($index)">
-            {{suggestion[objectProperty]}}
+            {{suggestion[objectProperty]}}<span ng-if="secondaryObjectProperty"> <small>({{suggestion[secondaryObjectProperty]}})</small></span>
         </li>
     </ul>
+
 </div>
 
 </div>

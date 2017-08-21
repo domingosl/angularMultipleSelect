@@ -4,16 +4,13 @@
         $scope.apiPath = "web/resources/skills.json";
 
         $scope.skillsList = [
-            {id: 1, name : "Java"},
-            {id: 2, name : "C"},
-            {id: 3, name : "C++"},
-            {id: 4, name : "Core Java"},
-            {id: 5, name : "JavaScript"},
-            {id: 6, name : "PHP"},
-            {id: 7, name : "HTML"},
-            {id: 8, name : "CSS"},
-            {id: 9, name : "Angular Js"},
-            {id: 10, name : "Bootstrap"}
+            {id: 1, name : "Pedro",     email: "foo@bar.com" },
+            {id: 1, name : "Giuseppe",  email: "foo1@bar.com" },
+            {id: 1, name : "Domenico",  email: "foo2@bar.com" },
+            {id: 1, name : "Claudio",   email: "foo3@bar.com" },
+            {id: 1, name : "Maria",     email: "foo4@bar.com" },
+            {id: 1, name : "Lupita",    email: "foo5@bar.com" },
+            {id: 1, name : "Simone",    email: "foo6@bar.com" }
         ];
 
         $scope.skillsList1 = [

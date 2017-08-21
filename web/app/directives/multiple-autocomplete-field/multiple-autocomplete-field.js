@@ -5,7 +5,6 @@
             link: function(scope, element, attrs) {
                 var model = $parse(attrs.focusMe);
                 scope.$watch(model, function(value) {
-                    console.log('value=',value);
                     if(value === true) {
                         $timeout(function() {
                             element[0].focus();
@@ -13,7 +12,6 @@
                     }
                 });
                 element.bind('blur', function() {
-                    console.log('blur')
                     scope.$apply(model.assign(scope, false));
                 })
             }
@@ -35,14 +33,16 @@
                     afterSelectItem : '=?',
                     beforeRemoveItem : '=?',
                     afterRemoveItem : '=?',
-                    maxSelection : '=?'
+                    maxSelection : '@',
+                    secondaryObjectProperty : '@'
                 },
                 templateUrl: 'multiple-autocomplete-tpl.html',
                 link : function(scope, element, attr) {
 
-                    scope.focusMe = false;
+                    scope.focusMe = { flag: false };
 
                     scope.objectProperty = attr.objectProperty;
+                    scope.secondaryObjectProperty = attr.secondaryObjectProperty || '';
                     scope.selectedItemIndex = 0;
                     scope.name = attr.name;
                     scope.isRequired = attr.required;
@@ -51,8 +51,9 @@
                     scope.isFocused = false;
                     scope.resultsToShow = false;
                     scope.results = {filter: []};
-                    scope.inputValue = '';
-                    scope.maxSelection = attr.maxSelection | 9999;
+                    scope.input = { value: '' };
+                    scope.maxSelection = attr.maxSelection || 9999;
+
 
                     var getSuggestionsList = function () {
                         var url = scope.apiUrl;
@@ -80,7 +81,7 @@
 
                     scope.onFocus = function () {
                         scope.isFocused = true;
-                        if(scope.inputValue.length >= 1)
+                        if(scope.input.value.length >= 1)
                             scope.resultsToShow = true;
                     };
 
@@ -99,6 +100,7 @@
                     };
 
                     scope.onChange = function () {
+
                         scope.selectedItemIndex = 0;
                         $timeout(function () {
                                 scope.resultsToShow = scope.results.filter.length !== 0;
@@ -115,14 +117,14 @@
                             27: 'esc'
                         };
                         var key = keys[$event.keyCode];
-                        if(key == 'backspace' && scope.inputValue == ""){
+                        if(key == 'backspace' && scope.input.value == ""){
                             if(scope.modelArr.length != 0){
                                 scope.removeAddedValues(scope.modelArr[scope.modelArr.length-1]);
                                 //scope.modelArr.pop();
                             }
                         }
                         else if(key == 'down'){
-                            var filteredSuggestionArr = $filter('filter')(scope.suggestionsArr, scope.inputValue);
+                            var filteredSuggestionArr = $filter('filter')(scope.suggestionsArr, scope.input.value);
                             filteredSuggestionArr = $filter('filter')(filteredSuggestionArr, scope.alreadyAddedValues);
                             if(scope.selectedItemIndex < filteredSuggestionArr.length -1)
                                 scope.selectedItemIndex++;
@@ -135,7 +137,7 @@
                             scope.isFocused=false;
                         }
                         else if(key == 'enter'){
-                            var filteredSuggestionArr = $filter('filter')(scope.suggestionsArr, scope.inputValue);
+                            var filteredSuggestionArr = $filter('filter')(scope.suggestionsArr, scope.input.value);
                             filteredSuggestionArr = $filter('filter')(filteredSuggestionArr, scope.alreadyAddedValues);
                             if(scope.selectedItemIndex < filteredSuggestionArr.length)
                                 scope.onSuggestedItemsClick(filteredSuggestionArr[scope.selectedItemIndex]);
@@ -151,9 +153,10 @@
                         if(scope.afterSelectItem && typeof(scope.afterSelectItem) == 'function')
                             scope.afterSelectItem(selectedValue);
 
-                        scope.inputValue = "";
+                        scope.input.value = "";
                         scope.resultsToShow = false;
-                        scope.focusMe = true;
+                        scope.focusMe.flag = true;
+
                     };
 
                     var isDuplicate = function (arr, item) {

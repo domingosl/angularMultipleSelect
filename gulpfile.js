@@ -68,7 +68,7 @@ gulp.task('inject', function () {
 		.pipe(gulp.dest('./web'));
 });
 // Static server
-gulp.task('serve', ['inject', 'watch'] , function() {
+gulp.task('serve', ['build', 'inject', 'watch'] , function() {
     browserSync.init({
         server: {
             baseDir: "./web",
