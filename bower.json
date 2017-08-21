@@ -28,6 +28,8 @@
   ],
   "license": "MIT",
   "ignore": [
+    "!build/*.min.js",
+    "!build/*.min.css",
     "**/.*",
     "node_modules",
     "bower_components",
