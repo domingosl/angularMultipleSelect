@@ -14,16 +14,19 @@
                 </span>
             </li>
 
+
+            <li>
+                <input name="{{name}}" ng-model="input.value" ng-keydown="keyParser($event)"
+                       ng-if="modelArr.length < maxSelection"
+                       err-msg-required="{{errMsgRequired}}"
+                       focus-me="focusMe.flag"
+                       placeholder="{{placeholder}}"
+                       ng-focus="onFocus()" ng-blur="onBlur()" ng-required="!modelArr.length && isRequired"
+                       ng-change="onChange()" />
+            </li>
+
         </ul>
     </div>
-
-
-    <input name="{{name}}" ng-model="input.value" placeholder="" ng-keydown="keyParser($event)"
-           ng-if="modelArr.length < maxSelection"
-           err-msg-required="{{errMsgRequired}}"
-           focus-me="focusMe.flag"
-           ng-focus="onFocus()" ng-blur="onBlur()" ng-required="!modelArr.length && isRequired"
-           ng-change="onChange()" />
 
 
     <div class="autocomplete-list" ng-show="resultsToShow" ng-mouseenter="onMouseEnter()" ng-mouseleave="onMouseLeave()">

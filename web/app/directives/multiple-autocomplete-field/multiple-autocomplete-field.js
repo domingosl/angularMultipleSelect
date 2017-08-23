@@ -34,15 +34,17 @@
                     beforeRemoveItem : '=?',
                     afterRemoveItem : '=?',
                     maxSelection : '@',
-                    secondaryObjectProperty : '@'
+                    secondaryObjectProperty : '@',
+                    placeholder: '@'
                 },
                 templateUrl: 'multiple-autocomplete-tpl.html',
                 link : function(scope, element, attr) {
 
-                    scope.focusMe = { flag: false };
+                    scope.focusMe = { flag: true };
 
                     scope.objectProperty = attr.objectProperty;
                     scope.secondaryObjectProperty = attr.secondaryObjectProperty || '';
+                    scope.placeholder = attr.placeholder || '';
                     scope.selectedItemIndex = 0;
                     scope.name = attr.name;
                     scope.isRequired = attr.required;
