@@ -37,6 +37,10 @@
             $scope.removedItem = item;
         };
 
+        $scope.autoChange = function (value) {
+            console.log(value);
+        };
+
         $scope.onSubmit = function () {
             console.log("submit");
             if($scope.multipleSelectForm.$invalid){

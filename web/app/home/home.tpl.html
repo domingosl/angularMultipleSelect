@@ -8,12 +8,15 @@
         <multiple-autocomplete ng-model="skills"
                                object-property="name"
                                secondary-object-property="email"
-                               max-selection="3" placeholder="hello world!"
+                               max-selection="3"
+                               placeholder="hello world!"
+                               after-change="autoChange"
+                               api-url="foo.com/?query=:value"
                                before-select-item="selectItemCallback"
                                after-select-item="selectItemCallback"
                                before-remove-item="removeItemCallback"
                                after-remove-item="removeItemCallback"
-                               suggestions-arr="skillsList">
+                               suggestions-arr="">
         </multiple-autocomplete>
         <label>Selected Model Value :<br/></label>{{skills}}
         <br/>

@@ -29,6 +29,7 @@
                     suggestionsArr : '=?',
                     modelArr : '=ngModel',
                     apiUrl : '@',
+                    afterChange : '=?',
                     beforeSelectItem : '=?',
                     afterSelectItem : '=?',
                     beforeRemoveItem : '=?',
@@ -57,14 +58,19 @@
                     scope.maxSelection = attr.maxSelection || 9999;
 
 
-                    var getSuggestionsList = function () {
-                        var url = scope.apiUrl;
+                    var getSuggestionsList = function (c) {
+                        var url = scope.apiUrl.replace(':value', scope.input.value);
                         $http({
                             method: 'GET',
                             url: url
                         }).then(function (response) {
                             scope.suggestionsArr = response.data;
+                            if(typeof c === 'function')
+                                c();
                         }, function (response) {
+                            scope.suggestionsArr = [];
+                            if(typeof c === 'function')
+                                c();
                             console.log("*****Angular-multiple-select **** ----- Unable to fetch list");
                         });
                     };
@@ -101,12 +107,29 @@
                             scope.resultsToShow = false;
                     };
 
+                    var bounceTimer;
+
                     scope.onChange = function () {
 
                         scope.selectedItemIndex = 0;
-                        $timeout(function () {
-                                scope.resultsToShow = scope.results.filter.length !== 0;
-                        }, 300);
+
+
+                        if(scope.afterChange && typeof(scope.afterChange) === 'function')
+                            scope.afterChange(scope.input.value);
+
+                        if(scope.apiUrl !== null && scope.apiUrl !== "") {
+                            if (bounceTimer)
+                                $timeout.cancel(bounceTimer);
+                            bounceTimer = $timeout(function () {
+                                getSuggestionsList(updateResults);
+                            }, 300);
+                        } else {
+                            $timeout(updateResults, 300);
+                        }
+                    };
+
+                    var updateResults = function () {
+                        scope.resultsToShow = scope.results.filter.length !== 0;
                     };
 
                     scope.keyParser = function ($event) {
