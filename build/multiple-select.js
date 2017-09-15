@@ -123,11 +123,12 @@ angular.module("templates", []).run(["$templateCache", function($templateCache) 
 
                         scope.selectedItemIndex = 0;
 
-
                         if(scope.afterChange && typeof(scope.afterChange) === 'function')
                             scope.afterChange(scope.input.value);
 
                         if(scope.apiUrl !== null && scope.apiUrl !== "") {
+                            scope.resultsToShow = false;
+
                             if (bounceTimer)
                                 $timeout.cancel(bounceTimer);
                             bounceTimer = $timeout(function () {
@@ -141,6 +142,11 @@ angular.module("templates", []).run(["$templateCache", function($templateCache) 
                     var updateResults = function () {
                         scope.resultsToShow = scope.results.filter.length !== 0;
                     };
+
+                    scope.$watch('results', function() {
+                        if(scope.results.filter)
+                            scope.resultsToShow = scope.results.filter.length !== 0 && scope.input.value.length > 0;
+                    }, true);
 
                     scope.keyParser = function ($event) {
                         var keys = {
