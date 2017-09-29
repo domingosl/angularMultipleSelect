@@ -36,7 +36,8 @@
                     afterRemoveItem : '=?',
                     maxSelection : '@',
                     secondaryObjectProperty : '@',
-                    placeholder: '@'
+                    placeholder: '@',
+                    resultsLimit: '=?'
                 },
                 templateUrl: 'multiple-autocomplete-tpl.html',
                 link : function(scope, element, attr) {
@@ -56,6 +57,7 @@
                     scope.results = {filter: []};
                     scope.input = { value: '' };
                     scope.maxSelection = attr.maxSelection || 9999;
+                    scope.resultsLimit = attr.resultsLimit || 10;
 
 
                     var getSuggestionsList = function (c) {

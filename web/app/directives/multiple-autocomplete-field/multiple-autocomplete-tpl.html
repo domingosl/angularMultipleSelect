@@ -33,7 +33,7 @@
 
     <ul ng-if="objectProperty == undefined || objectProperty == ''">
         <li ng-class="{'autocomplete-active' : selectedItemIndex == $index}"
-            ng-repeat="suggestion in (results.filter = (suggestionsArr | filter : input.value | filter : alreadyAddedValues | limitTo: 5))"
+            ng-repeat="suggestion in (results.filter = (suggestionsArr | filter : input.value | filter : alreadyAddedValues | limitTo: resultsLimit))"
             ng-click="onSuggestedItemsClick(suggestion)" ng-mouseenter="mouseEnterOnItem($index)">
             {{suggestion}}
         </li>
@@ -41,7 +41,7 @@
 
     <ul ng-if="objectProperty != undefined && objectProperty != ''">
         <li ng-class="{'autocomplete-active' : selectedItemIndex == $index}"
-            ng-repeat="suggestion in (results.filter = (suggestionsArr | filter : input.value | filter : alreadyAddedValues | limitTo: 5))"
+            ng-repeat="suggestion in (results.filter = (suggestionsArr | filter : input.value | filter : alreadyAddedValues | limitTo: resultsLimit))"
             ng-click="onSuggestedItemsClick(suggestion)" ng-mouseenter="mouseEnterOnItem($index)">
             {{suggestion[objectProperty]}}<span ng-if="secondaryObjectProperty"> <small>({{suggestion[secondaryObjectProperty]}})</small></span>
         </li>
