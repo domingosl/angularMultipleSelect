@@ -178,14 +178,13 @@
     color: #3c763d;
 }
 
-.loading {
+.mc-loading-spinner {
     height: 15px;
     width: 15px;
     animation: rotation 1s infinite linear;
     border: 2px solid #e5692c;
     border-top-color: #fff;
     border-radius: 50%;
-    margin-right: 10px;
     position: absolute;
     margin-top: 10px;
     margin-left: -20px;
