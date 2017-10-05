@@ -52,7 +52,7 @@ angular.module("templates", []).run(["$templateCache", function($templateCache) 
                 templateUrl: 'multiple-autocomplete-tpl.html',
                 link : function(scope, element, attr) {
 
-                    scope.focusMe = { flag: true };
+                    scope.focusMe = { flag: false };
 
                     scope.objectProperty = attr.objectProperty;
                     scope.secondaryObjectProperty = attr.secondaryObjectProperty || '';
