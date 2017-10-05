@@ -1,5 +1,5 @@
+<span class="loading" ng-if="isLoading"></span>
 <div class="ng-ms form-item-container">
-
     <div class="selected-items">
         <ul class="list-inline">
 
@@ -13,8 +13,6 @@
                     <i class="glyphicon glyphicon-remove"></i></span>&nbsp;
                 </span>
             </li>
-
-
             <li>
                 <input name="{{name}}" ng-model="input.value" ng-keydown="keyParser($event)"
                        ng-if="modelArr.length < maxSelection"

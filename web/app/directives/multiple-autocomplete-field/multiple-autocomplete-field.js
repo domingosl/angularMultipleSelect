@@ -61,21 +61,32 @@
 
 
                     var getSuggestionsList = function (c) {
+                        loaderOn();
                         var url = scope.apiUrl.replace(':value', scope.input.value);
                         $http({
                             method: 'GET',
                             url: url
                         }).then(function (response) {
                             scope.suggestionsArr = response.data;
+                            loaderOff();
                             if(typeof c === 'function')
                                 c();
                         }, function (response) {
                             scope.suggestionsArr = [];
+                            loaderOff();
                             if(typeof c === 'function')
                                 c();
                             console.log("*****Angular-multiple-select **** ----- Unable to fetch list");
                         });
                     };
+
+                    function loaderOn() {
+                        scope.isLoading = true;
+                    }
+
+                    function loaderOff() {
+                        scope.isLoading = false;
+                    }
 
                     if(scope.suggestionsArr == null || scope.suggestionsArr == "") {
                         if(scope.apiUrl != null && scope.apiUrl != "")
